@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0c0e1d">
+<title>Visor VR – YouTube e MP4 em realidade virtual</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Palco: canvas WebGL (MP4) ou dois "olhos" DOM (YouTube) -->
+<main id="stage">
+  <canvas id="gl"></canvas>
+  <div id="eyes">
+    <div class="eye"><div class="plane"><div id="ytL"></div></div></div>
+    <div class="eye" id="eR"><div class="plane"><div id="ytR"></div></div></div>
+  </div>
+</main>
+
+<!-- Controles sem sensores: joystick + direcionais -->
+<div id="ctl" hidden>
+  <div id="joy"><i id="knob"></i></div>
+  <div id="dpad">
+    <button data-d="0,-1" aria-label="Olhar para cima">▲</button>
+    <button data-d="-1,0" aria-label="Olhar para a esquerda">◀</button>
+    <button data-d="0,1" aria-label="Olhar para baixo">▼</button>
+    <button data-d="1,0" aria-label="Olhar para a direita">▶</button>
+  </div>
+</div>
+
+<!-- Barra do player -->
+<div id="bar" hidden>
+  <button id="bMenu" aria-label="Menu">☰</button>
+  <button id="bPlay" aria-label="Reproduzir ou pausar">▶</button>
+  <button id="bBack">−10</button>
+  <button id="bFwd">+10</button>
+  <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Progresso">
+  <input id="vol" type="range" min="0" max="1" step=".05" value="1" aria-label="Volume">
+  <button id="bFs" aria-label="Tela cheia">⛶</button>
+  <button id="bVr">VR</button>
+</div>
+<button id="exitvr" hidden>Sair do VR</button>
+<div id="toast" role="status"></div>
+
+<!-- Tela inicial -->
+<section id="home" class="panel">
+  <header>
+    <svg width="72" height="44" viewBox="0 0 72 44" aria-hidden="true"><rect x="2" y="4" width="68" height="36" rx="16" fill="none" stroke="#8f9bff" stroke-width="3"/><circle cx="23" cy="22" r="9" fill="#ffb066"/><circle cx="49" cy="22" r="9" fill="#ffb066"/></svg>
+    <h1>Visor VR</h1>
+    <p>YouTube e vídeos MP4 no seu headset de celular, direto no navegador.</p>
+  </header>
+  <div class="menu">
+    <button id="hYt">Abrir YouTube</button>
+    <div id="ytBox" hidden><input id="ytUrl" type="url" placeholder="Cole o link do vídeo" inputmode="url"><button id="ytGo">Carregar</button></div>
+    <button id="hFile">Abrir vídeo local</button>
+    <button id="hVr" class="primary">Entrar no VR</button>
+    <button id="hCal">Calibrar visão</button>
+    <button id="hSet">Configurações</button>
+  </div>
+  <p class="note">Sensores exigem HTTPS. No iPhone (iOS 13+) o navegador pede permissão ao tocar em Entrar no VR ou Calibrar visão; no iOS o modo imersivo é limitado e a tela cheia nem sempre está disponível.</p>
+</section>
+
+<!-- Configurações -->
+<section id="settings" class="panel" hidden>
+  <h2>Configurações</h2>
+  <div id="opts"></div>
+  <label><span>Formato do vídeo</span>
+    <select id="mode">
+      <option value="2d">2D</option>
+      <option value="dup">2D VR (duplicado nos dois olhos)</option>
+      <option value="sbs">3D lado a lado (SBS)</option>
+      <option value="ou">3D acima e abaixo (Over-Under)</option>
+      <option value="180">180°</option>
+      <option value="360">360°</option>
+    </select>
+  </label>
+  <label class="chk"><input type="checkbox" id="showCtl"> Sempre mostrar controles na tela</label>
+  <button id="sRe">Recentralizar visão</button>
+  <button id="sCine">Modo cinema VR</button>
+  <button id="sSens">Ativar sensores</button>
+  <pre id="info"></pre>
+  <button id="sBack" class="primary">Voltar</button>
+</section>
+
+<input type="file" id="file" accept="video/mp4,video/*" hidden>
+<!-- Three.js via CDN (versão fixa) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
