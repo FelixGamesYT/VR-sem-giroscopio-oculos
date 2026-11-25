@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b0d14">
+<title>VR Player Web</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Tela inicial -->
+<main id="home">
+  <div class="logo">◉◉ <b>VR</b> Player</div>
+  <p class="sub">YouTube e MP4 no seu headset de celular</p>
+  <button data-act="yt">▶ Abrir YouTube</button>
+  <button data-act="file">📁 Abrir vídeo local</button>
+  <button class="pri" data-act="vr">🥽 Entrar no VR</button>
+  <button data-act="calib">🎯 Calibrar visão</button>
+  <button data-act="cfg">⚙ Configurações</button>
+  <input id="file" type="file" accept="video/*" hidden>
+</main>
+
+<!-- Palco: WebGL (MP4) + CSS 3D (YouTube) + HUD -->
+<section id="stage" hidden>
+  <video id="v" playsinline crossorigin="anonymous"></video>
+  <canvas id="gl"></canvas>
+  <div id="css3d">
+    <div class="eye"><div class="world"><div class="plane"></div></div></div>
+    <div class="eye"><div class="world"><div class="plane"></div></div></div>
+  </div>
+  <div id="hud">
+    <div class="row">
+      <button data-act="home">✕</button><button data-act="cfg">⚙</button>
+      <button data-act="calib">🎯</button><button data-act="fs">⛶</button>
+      <button class="pri" data-act="vr">🥽 VR</button>
+    </div>
+    <div class="row" id="ctl">
+      <button data-act="back">⏪</button><button data-act="play" id="bplay">▶</button><button data-act="fwd">⏩</button>
+      <input type="range" id="seek" min="0" max="1000" value="0"><span id="time">0:00</span>
+      <input type="range" id="vol" min="0" max="1" step=".05" value="1" style="max-width:70px">
+    </div>
+  </div>
+  <div id="pad">
+    <div id="joy"><i id="knob"></i></div>
+    <div id="dp"><button data-d="u">▲</button><button data-d="l">◀</button><button data-d="r">▶</button><button data-d="d">▼</button></div>
+  </div>
+</section>
+
+<!-- Modal YouTube -->
+<div id="ytm" class="modal" hidden>
+  <h3>Link do YouTube</h3>
+  <input id="yturl" type="url" placeholder="https://youtu.be/...">
+  <div class="row2"><button data-act="ytgo" class="pri">Abrir</button><button data-act="ytx">Cancelar</button></div>
+</div>
+
+<!-- Configurações -->
+<aside id="cfg" hidden>
+  <header><b>Configurações</b><button data-act="cfg">✕</button></header>
+  <div id="cfgbody"></div>
+  <label>Projeção<select id="proj"><option value="flat">Tela plana (cinema)</option><option value="180">180°</option><option value="360">360°</option></select></label>
+  <label>Formato<select id="st"><option value="mono">2D (no VR: duplicado nos 2 olhos)</option><option value="sbs">3D lado a lado (SBS)</option><option value="ou">3D cima/baixo (Over-Under)</option></select></label>
+  <label class="chk"><input type="checkbox" id="padck"> Mostrar controles na tela</label>
+  <button data-act="calib">🎯 Recentralizar visão</button>
+  <pre id="sinfo"></pre>
+</aside>
+<div id="toast" hidden></div>
+
+<!-- Three.js fixado (r128). Para uso offline, baixe o arquivo e aponte o src para ele. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
